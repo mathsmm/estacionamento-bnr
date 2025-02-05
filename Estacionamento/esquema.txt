@@ -1,0 +1,41 @@
+TABELAS:
+    valor_referencia:
+        id (chave primária)
+        vlr_hora_inicial
+        vlr_hora_adicional
+        dt_inicial_vigencia (somente data)
+        dt_final_vigencia (somente data)
+
+    * a coluna dt_final_vigencia não é necessária
+      pois se pode usar sempre a data inicial do
+      valor até a data inicial do próximo valor.
+      caso não exista um próximo, continua
+      usando a atual indefinidamente
+
+    estadia_veiculo:
+        id_placa (chave primária)
+        dt_hora_entrada (data e hora)
+        dt_hora_saida (data e hora)
+
+    * como a placa é string com mais de 32 bits
+      de tamanho (7 caracteres), seria mais interessante
+      manter outra tabela com os carros registrados
+      e a "estadia_veiculo" com chave estrangeira
+      apontando para ela (normalização)
+
+DETALHES:
+    * a vigência considera os valores de 
+      entrada e saída dos veículos.
+
+    * não precisa armazenar o valor total
+      a pagar. ele é calculado na hora.
+
+    cálculo de preço:
+        * a primeira hora sempre será o valor de
+          hora inicial. as demais horas serão
+          as adicionais.
+
+        - até 30 minutos: 1/2 hora inicial
+        - até 1 hora e 10 minutos: hora inicial
+        - para cada hora a mais, somar uma hora adicional.
+          contar um minuto extra como hora inteira.
