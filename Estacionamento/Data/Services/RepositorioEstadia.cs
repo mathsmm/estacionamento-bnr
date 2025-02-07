@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Estacionamento.Data.Services
 {
-    public class RepositorioEstadiaVeiculo : IRepositorioEstadiaVeiculo
+    public class RepositorioEstadia : IRepositorioEstadia
     {
         private readonly DataContext _contexto;
 
-        public RepositorioEstadiaVeiculo(DataContext contexto)
+        public RepositorioEstadia(DataContext contexto)
         {
             this._contexto = contexto;
         }
 
-        public async Task<EstadiaVeiculo[]> ObterTodas()
+        public async Task<Estadia[]> ObterTodas()
         {
-            IQueryable<EstadiaVeiculo> consulta = _contexto.EstadiaVeiculo;
+            IQueryable<Estadia> consulta = _contexto.Estadia;
 
             consulta = consulta.AsNoTracking()
                                .OrderBy(x => x.DtHrEntrada);
@@ -23,12 +23,13 @@ namespace Estacionamento.Data.Services
             return await consulta.ToArrayAsync();
         }
 
-        public async Task<EstadiaVeiculo?> ObterUltimaPorPlaca(string placa)
+        public async Task<Estadia?> ObterUltimaPorPlaca(string placa)
         {
-            IQueryable<EstadiaVeiculo> consulta = _contexto.EstadiaVeiculo;
+            IQueryable<Estadia> consulta = _contexto.Estadia;
 
             consulta = consulta.AsNoTracking()
-                               .Where(x => x.Placa.ToUpper() == placa.ToUpper())
+                               .Include(x => x.Veiculo)
+                               .Where(x => x.Veiculo.Placa.ToUpper() == placa.ToUpper())
                                .OrderBy(x => x.DtHrEntrada);
 
             return await consulta.FirstOrDefaultAsync();

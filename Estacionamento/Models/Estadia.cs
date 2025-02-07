@@ -3,24 +3,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Estacionamento.Models
 {
-    public class EstadiaVeiculo
+    public class Estadia
     {
-        public EstadiaVeiculo(
-            string placa,
+        public Estadia(
+            int veiculoId,
             DateTime dtHrEntrada,
             DateTime dtHrSaida
         ) 
         {
-            this.Placa = placa;
+            this.VeiculoId = veiculoId;
             this.DtHrEntrada = dtHrEntrada;
             this.DtHrSaida = dtHrSaida;
         }
         [Key]
-        [Column(TypeName = "Varchar(7)")]
-        [StringLength(7, ErrorMessage = "A placa deve conter 7 caracteres alfanuméricos")]
-        public string Placa { get; set; }
+        [ForeignKey("Veiculo")]
+        public int VeiculoId { get; set; }
+
+        public Veiculo Veiculo { get; set; }
+
         [Required]
         public DateTime DtHrEntrada { get; set; }
+
         public DateTime DtHrSaida { get; set; }
     }
 }

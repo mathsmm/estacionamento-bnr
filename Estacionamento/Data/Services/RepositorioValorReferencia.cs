@@ -25,7 +25,8 @@ namespace Estacionamento.Data.Services
 
         public async Task<ValorReferencia> ObterPorData(DateTime data)
         {
-            // Consultar valor que esteja entre uma data de início e uma data de fim
+            // Consultar valor que esteja entre duas datas
+            
         }
     }
 }
