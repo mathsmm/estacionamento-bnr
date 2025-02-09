@@ -5,6 +5,8 @@ namespace Estacionamento.Models
 {
     public class ValorReferencia
     {
+        public ValorReferencia() {}
+
         public ValorReferencia(
             int id,
             decimal vlrHrInicial,
@@ -24,9 +26,11 @@ namespace Estacionamento.Models
         public int Id { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal")]
         public decimal VlrHrInicial { get; set; }
 
         [Required]
+        [Column(TypeName = "decimal")]
         public decimal VlrHrAdicional { get; set; }
 
         [Required]

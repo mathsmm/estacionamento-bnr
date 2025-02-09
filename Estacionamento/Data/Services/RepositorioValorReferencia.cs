@@ -15,6 +15,7 @@ namespace Estacionamento.Data.Services
 
         public async Task<ValorReferencia[]> ObterTodas()
         {
+            // Escalabilidade: implementar paginação
             IQueryable<ValorReferencia> consulta = _contexto.ValorReferencia;
 
             consulta = consulta.AsNoTracking()
@@ -26,7 +27,13 @@ namespace Estacionamento.Data.Services
         public async Task<ValorReferencia> ObterPorData(DateTime data)
         {
             // Consultar valor que esteja entre duas datas
-            
+            IQueryable<ValorReferencia> consulta = _contexto.ValorReferencia;
+
+            consulta = consulta.AsNoTracking()
+                               .Where(x => x.DtIniVigencia <= data)
+                               .OrderBy(x => x.DtIniVigencia);
+
+            return await consulta.FirstAsync();
         }
     }
 }

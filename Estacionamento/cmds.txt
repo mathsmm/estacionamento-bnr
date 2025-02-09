@@ -14,31 +14,4 @@ dotnet ef migrations add CreateInitial
 dotnet ef database update
 
 dotnet add package Newtonsoft.Json
-dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson
-(se der erro, tentar o próximo:)
 dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson --version 3.1.7
-
-1)  Criar um diretório
-2)  Neste diretório criar o projeto WebApi:
-    dotnet new webapi -n Projeto_API
-3)  Verificar se a API está funcionando:
-    https://localhost:5001/[NomeControler]
-4)  Baixar o Postman ou caso desejar podem utilizar apenas o navegador
-5)  Instalar os pacotes do EntityFrameWork:
-    dotnet add package Microsoft.EntityFrameworkCore
-    dotnet add package Microsoft.EntityFrameworkCore.SqlServer
-    dotnet add package Microsoft.EntityFrameworkCore.Design
-    dotnet add package Microsoft.EntityFrameworkCore.Tools
-6)  Criar os diretorios Models e Context
-7)  Dentro do Models adicioar a classe conforme Base de dados
-8)  Dentro do Context adicionar a classe de contexto contendo os 
-    DbSets das tabelas da base de dados, utilizando as classes modelo
-9)  No AppSettings adicionar a string de conexão
-10) Na Classe Startup, adicionar a configuração para o Context contendo a string de conexão
-11) Criar o controler para cada rota desejada, exemplo classe Cliente
-12) No controller adicionar todas as funções desejadas para rotas
-13) Caso necessário instalar o dotnet ef:	
-	dotnet tool install --global dotnet-ef
-14) Caso for criado a base de dados a partir do dotnet executar os comandos:
-	dotnet ef migrations add NomeDaMigrationQueDesejar
-	dotnet ef database update

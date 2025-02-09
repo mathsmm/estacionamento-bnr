@@ -15,6 +15,7 @@ namespace Estacionamento.Data.Services
 
         public async Task<Veiculo[]> ObterTodos()
         {
+            // Escalabilidade: implementar paginação
             IQueryable<Veiculo> consulta = _contexto.Veiculo;
 
             consulta = consulta.AsNoTracking()

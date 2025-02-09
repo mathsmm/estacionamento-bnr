@@ -15,6 +15,7 @@ namespace Estacionamento.Data.Services
 
         public async Task<Estadia[]> ObterTodas()
         {
+            // Escalabilidade: implementar paginação
             IQueryable<Estadia> consulta = _contexto.Estadia;
 
             consulta = consulta.AsNoTracking()
@@ -23,13 +24,14 @@ namespace Estacionamento.Data.Services
             return await consulta.ToArrayAsync();
         }
 
-        public async Task<Estadia?> ObterUltimaPorPlaca(string placa)
+        public async Task<Estadia?> ObterPorPlacaEDataHora(string placa, DateTime dataHora)
         {
             IQueryable<Estadia> consulta = _contexto.Estadia;
 
             consulta = consulta.AsNoTracking()
                                .Include(x => x.Veiculo)
-                               .Where(x => x.Veiculo.Placa.ToUpper() == placa.ToUpper())
+                               .Where(x => x.Veiculo.Placa.ToUpper() == placa.ToUpper()
+                                      &&   x.DtHrEntrada <= dataHora)
                                .OrderBy(x => x.DtHrEntrada);
 
             return await consulta.FirstOrDefaultAsync();

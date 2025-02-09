@@ -5,6 +5,8 @@ namespace Estacionamento.Models
 {
     public class Estadia
     {
+        public Estadia() {}
+
         public Estadia(
             int veiculoId,
             DateTime dtHrEntrada,

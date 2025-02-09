@@ -5,6 +5,8 @@ namespace Estacionamento.Models
 {
     public class Veiculo
     {
+        public Veiculo() {}
+
         public Veiculo(
             int id,
             string placa
@@ -16,11 +18,13 @@ namespace Estacionamento.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id;
+        public int Id { get; set; }
 
-        [Column(TypeName = "Varchar(7)")]
+        [Column(TypeName = "varchar(7)")]
         [StringLength(7, ErrorMessage = "A placa deve conter 7 caracteres alfanuméricos")]
         [Required]
-        public string Placa;
+        public string Placa { get; set; }
+
+        public IEnumerable<Estadia> Estadias { get; set; }
     }
 }
