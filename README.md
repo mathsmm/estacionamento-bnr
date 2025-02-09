@@ -5,3 +5,6 @@ O programa é uma Web API feita com ASP.NET Core que faz o controle de entradas 
 Pretende-se criar um Frontend para se comunicar à API e rodar ambos no mesmo servidor localmente para o usuário não necessitar de acesso à internet.
 
 Como a aplicação é pequena, não desenvolvi requisitos de usuário/sistema. Apenas montei o roteiro [esquema.txt](Estacionamento/esquema.txt).
+
+USAR ANGULAR MATERIAL
+https://material.angular.io/
