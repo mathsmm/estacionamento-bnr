@@ -1,0 +1,37 @@
+.containerVert {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  padding: 0 16px;
+}
+
+.containerHor {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  gap: 32px
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.width-33 {
+  width: 33.3%;
+}
+
+.bt-marcar {
+  width: 33.3%;
+  height: 56px;
+  font-weight: bold;
+}
+
+.marcar-entrada {
+  background-color: #dcf9df;
+}
+
+.marcar-saida {
+  background-color: #fadbdf;
+}

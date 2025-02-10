@@ -19,9 +19,22 @@ namespace Estacionamento.Data.Services
             IQueryable<Estadia> consulta = _contexto.Estadia;
 
             consulta = consulta.AsNoTracking()
+                               .Include(x => x.Veiculo)
                                .OrderBy(x => x.DtHrEntrada);
 
             return await consulta.ToArrayAsync();
+        }
+
+        public async Task<Estadia?> ObterUltimaPorPlaca(string placa)
+        {
+            IQueryable<Estadia> consulta = _contexto.Estadia;
+
+            consulta = consulta.AsNoTracking()
+                               .Include(x => x.Veiculo)
+                               .Where(x => x.Veiculo.Placa.ToUpper() == placa.ToUpper())
+                               .OrderBy(x => x.DtHrEntrada);
+
+            return await consulta.FirstOrDefaultAsync();
         }
 
         public async Task<Estadia?> ObterPorPlacaEDataHora(string placa, DateTime dataHora)

@@ -10,12 +10,14 @@ namespace Estacionamento.Models
         public Estadia(
             int veiculoId,
             DateTime dtHrEntrada,
-            DateTime dtHrSaida
+            DateTime dtHrSaida,
+            decimal vlrCalculado
         ) 
         {
             this.VeiculoId = veiculoId;
             this.DtHrEntrada = dtHrEntrada;
             this.DtHrSaida = dtHrSaida;
+            this.VlrCalculado = vlrCalculado;
         }
         [Key]
         [ForeignKey("Veiculo")]
@@ -27,5 +29,8 @@ namespace Estacionamento.Models
         public DateTime DtHrEntrada { get; set; }
 
         public DateTime DtHrSaida { get; set; }
+
+        [Column(TypeName = "decimal")]
+        public decimal VlrCalculado { get; set; }
     }
 }

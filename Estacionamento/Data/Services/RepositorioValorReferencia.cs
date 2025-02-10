@@ -24,7 +24,7 @@ namespace Estacionamento.Data.Services
             return await consulta.ToArrayAsync();
         }
 
-        public async Task<ValorReferencia> ObterPorData(DateTime data)
+        public async Task<ValorReferencia?> ObterPorData(DateTime data)
         {
             // Consultar valor que esteja entre duas datas
             IQueryable<ValorReferencia> consulta = _contexto.ValorReferencia;
@@ -33,7 +33,7 @@ namespace Estacionamento.Data.Services
                                .Where(x => x.DtIniVigencia <= data)
                                .OrderBy(x => x.DtIniVigencia);
 
-            return await consulta.FirstAsync();
+            return await consulta.FirstOrDefaultAsync();
         }
     }
 }

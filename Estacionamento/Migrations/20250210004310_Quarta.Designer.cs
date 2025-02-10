@@ -4,6 +4,7 @@ using Estacionamento.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Estacionamento.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250210004310_Quarta")]
+    partial class Quarta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,15 +47,15 @@ namespace Estacionamento.Migrations
                         new
                         {
                             VeiculoId = 1,
-                            DtHrEntrada = new DateTime(2015, 6, 1, 13, 45, 30, 0, DateTimeKind.Unspecified),
-                            DtHrSaida = new DateTime(2015, 6, 1, 13, 45, 45, 0, DateTimeKind.Unspecified),
+                            DtHrEntrada = new DateTime(2025, 2, 9, 21, 43, 10, 270, DateTimeKind.Local).AddTicks(3015),
+                            DtHrSaida = new DateTime(2025, 2, 9, 21, 43, 10, 271, DateTimeKind.Local).AddTicks(4372),
                             VlrCalculado = 0m
                         },
                         new
                         {
                             VeiculoId = 2,
-                            DtHrEntrada = new DateTime(2015, 6, 1, 13, 46, 0, 0, DateTimeKind.Unspecified),
-                            DtHrSaida = new DateTime(2015, 6, 1, 13, 46, 15, 0, DateTimeKind.Unspecified),
+                            DtHrEntrada = new DateTime(2025, 2, 9, 21, 43, 10, 271, DateTimeKind.Local).AddTicks(5929),
+                            DtHrSaida = new DateTime(2025, 2, 9, 21, 43, 10, 271, DateTimeKind.Local).AddTicks(5932),
                             VlrCalculado = 0m
                         });
                 });
@@ -77,15 +80,6 @@ namespace Estacionamento.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ValorReferencia");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DtIniVigencia = new DateTime(2015, 6, 1, 13, 45, 30, 0, DateTimeKind.Unspecified),
-                            VlrHrAdicional = 5m,
-                            VlrHrInicial = 3m
-                        });
                 });
 
             modelBuilder.Entity("Estacionamento.Models.Veiculo", b =>

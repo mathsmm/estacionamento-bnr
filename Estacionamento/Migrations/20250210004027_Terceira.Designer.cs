@@ -4,6 +4,7 @@ using Estacionamento.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Estacionamento.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250210004027_Terceira")]
+    partial class Terceira
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,22 +42,6 @@ namespace Estacionamento.Migrations
                     b.HasKey("VeiculoId");
 
                     b.ToTable("Estadia");
-
-                    b.HasData(
-                        new
-                        {
-                            VeiculoId = 1,
-                            DtHrEntrada = new DateTime(2015, 6, 1, 13, 45, 30, 0, DateTimeKind.Unspecified),
-                            DtHrSaida = new DateTime(2015, 6, 1, 13, 45, 45, 0, DateTimeKind.Unspecified),
-                            VlrCalculado = 0m
-                        },
-                        new
-                        {
-                            VeiculoId = 2,
-                            DtHrEntrada = new DateTime(2015, 6, 1, 13, 46, 0, 0, DateTimeKind.Unspecified),
-                            DtHrSaida = new DateTime(2015, 6, 1, 13, 46, 15, 0, DateTimeKind.Unspecified),
-                            VlrCalculado = 0m
-                        });
                 });
 
             modelBuilder.Entity("Estacionamento.Models.ValorReferencia", b =>
@@ -77,15 +64,6 @@ namespace Estacionamento.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ValorReferencia");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DtIniVigencia = new DateTime(2015, 6, 1, 13, 45, 30, 0, DateTimeKind.Unspecified),
-                            VlrHrAdicional = 5m,
-                            VlrHrInicial = 3m
-                        });
                 });
 
             modelBuilder.Entity("Estacionamento.Models.Veiculo", b =>

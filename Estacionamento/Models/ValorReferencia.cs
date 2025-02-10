@@ -11,8 +11,7 @@ namespace Estacionamento.Models
             int id,
             decimal vlrHrInicial,
             decimal vlrHrAdicional,
-            DateTime dtIniVigencia,
-            DateTime dtFimVigencia
+            DateTime dtIniVigencia
         ) 
         {
             this.Id = id;

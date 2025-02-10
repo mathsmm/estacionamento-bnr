@@ -10,14 +10,20 @@ namespace Estacionamento.Controllers
     {
         private readonly IRepositorio _repositorio;
         private readonly IRepositorioEstadia _repositorioEstadia;
+        private readonly IRepositorioValorReferencia _repositorioValorReferencia;
+        private readonly IRepositorioVeiculo _repositorioVeiculo;
 
         public EstadiaController(
             IRepositorio repositorio,
-            IRepositorioEstadia repositorioEstadia
+            IRepositorioEstadia repositorioEstadia,
+            IRepositorioValorReferencia repositorioValorReferencia,
+            IRepositorioVeiculo repositorioVeiculo
         )
         {
             this._repositorio = repositorio;
             this._repositorioEstadia = repositorioEstadia;
+            this._repositorioValorReferencia = repositorioValorReferencia;
+            this._repositorioVeiculo = repositorioVeiculo;
         }
 
         [HttpGet]
@@ -35,16 +41,13 @@ namespace Estacionamento.Controllers
             }
         }
 
-        // FORMATO: yyyy-MM-ddTHH:mm:ss
-        // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#the-sortable-s-format-specifier
-        [HttpGet("placa={placa}&dataHora={dataHora}")]
-        public async Task<IActionResult> GetPorPlacaEDataHora(string placa, string dataHora)
+        [HttpGet("placa={placa}")]
+        public async Task<IActionResult> GetPorPlacaEDataHora(string placa)
         {
             try
             {
-                DateTime dataHoraDT = DateTime.Parse(dataHora);
                 return Ok(
-                    await _repositorioEstadia.ObterPorPlacaEDataHora(placa, dataHoraDT)
+                    await _repositorioEstadia.ObterUltimaPorPlaca(placa)
                 );
             }
             catch (Exception ex)
@@ -53,11 +56,26 @@ namespace Estacionamento.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(Estadia estadia)
+        [HttpPost("placa={placa}")]
+        public async Task<IActionResult> Post(string placa)
         {
             try
             {
+                var estadiaCadastrada = await _repositorioEstadia.ObterUltimaPorPlaca(placa);
+                if ((estadiaCadastrada != null) && (estadiaCadastrada.DtHrSaida == default))
+                {
+                    return BadRequest($"Já existe uma estadia ativa para esse veículo");
+                }
+                var veiculoCadastrado = await this._repositorioVeiculo.ObterPorPlaca(placa);
+                if (veiculoCadastrado == null)
+                {
+                    veiculoCadastrado = new Veiculo(0, placa);
+                }
+                Estadia estadia = new Estadia();
+                estadia.Veiculo = veiculoCadastrado;
+                estadia.DtHrEntrada = DateTime.Now;
+                estadia.DtHrSaida = default;
+                estadia.VlrCalculado = default;
                 _repositorio.Adicionar(estadia);
                 if (await this._repositorio.EfetuouAlteracoesAsync())
                 {
@@ -71,28 +89,56 @@ namespace Estacionamento.Controllers
             return BadRequest();
         }
 
-        // FORMATO: yyyy-MM-ddTHH:mm:ss
-        // https://learn.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings#the-sortable-s-format-specifier
-        [HttpPut("placa={placa}&dataHora={dataHora}")]
-        public async Task<IActionResult> Put(string placa, string dataHora, Estadia estadia)
+        [HttpPut("placa={placa}")]
+        public async Task<IActionResult> Put(string placa)
         {
             try
             {
-                DateTime dataHoraDT = DateTime.Parse(dataHora);
-                var estadiaCadastrada = await _repositorioEstadia.ObterPorPlacaEDataHora(placa, dataHoraDT);
+                var estadiaCadastrada = await _repositorioEstadia.ObterUltimaPorPlaca(placa);
                 if (estadiaCadastrada == null)
                 {
                     return NotFound();
                 }
-                _repositorio.Atualizar(estadia);
+                DateTime dtAtual = DateTime.Now;
+                estadiaCadastrada.DtHrSaida = dtAtual;
+
+                // Calcula valor final
+                var vlrReferencia = await this._repositorioValorReferencia.ObterPorData(dtAtual);
+                if (vlrReferencia == null)
+                {
+                    return BadRequest("Não há valor de referência cadastrado");
+                }
+                TimeSpan difTempo = estadiaCadastrada.DtHrSaida - estadiaCadastrada.DtHrEntrada;
+                if (difTempo.TotalMinutes <= 30.0)
+                {
+                    estadiaCadastrada.VlrCalculado = vlrReferencia.VlrHrInicial / 2;
+                }
+                else
+                if (difTempo.TotalMinutes > 30.0)
+                {
+                    double minutosSobrando = difTempo.TotalMinutes - 70.0;
+                    if (minutosSobrando <= 0.0)
+                    {
+                        estadiaCadastrada.VlrCalculado = vlrReferencia.VlrHrInicial;
+                    }
+                    else
+                    {
+                        estadiaCadastrada.VlrCalculado = 
+                            vlrReferencia.VlrHrInicial + 
+                            vlrReferencia.VlrHrAdicional *
+                            (((int)minutosSobrando + 60) / 60);
+                    }
+                }
+
+                _repositorio.Atualizar(estadiaCadastrada);
                 if (await _repositorio.EfetuouAlteracoesAsync())
                 {
-                    return Ok(estadia);
+                    return Ok(estadiaCadastrada);
                 }
             }
             catch (Exception ex)
             {
-                return BadRequest($"Ao atualizar a estadia, ocorreu o erro: {ex.Message}");
+                return BadRequest("Ao atualizar a estadia, ocorreu o erro: " + ex.Message);
             }
             return BadRequest();
         }
